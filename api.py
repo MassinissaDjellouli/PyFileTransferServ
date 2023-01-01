@@ -30,7 +30,6 @@ def downloadFilesInChunks(paths,requestId):
 @app.get("/getList/{path}")
 def getFileList(path:str):
     path = path.replace("__separator__","/")
-    print(get_size(path), 'bytes')
     if(not os.path.exists(path) or os.path.isfile(path)):
         raise HTTPException(404,"This directory does not exist")
     list = []
@@ -114,13 +113,16 @@ def getMultiple(paths):
 
 def get_size(start_path = '.'):
     total_size = 0
+    amountOfFiles = 0
     for dirpath, dirnames, filenames in os.walk(start_path):
+        amountOfFiles += 1
+        if(amountOfFiles > 1000):
+            raise HTTPException(401,"Too much files.")
         for f in filenames:
             fp = os.path.join(dirpath, f)
             # skip if it is symbolic link
             if not os.path.islink(fp):
                 total_size += os.path.getsize(fp)
-
     return total_size
 
 def getSingle(path):
