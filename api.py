@@ -26,8 +26,8 @@ data = Data()
 def downloadFilesInChunks(paths,requestId):
     data.chunkQueue[requestId] = []
     file = ""
-    if len(paths) > 1: file =base64.b85encode(getMultiple(paths))
-    else: file = base64.b85encode(getSingle(paths[0]))
+    if len(paths) > 1: file =base64.b64encode(getMultiple(paths))
+    else: file = base64.b64encode(getSingle(paths[0]))
     chunkSize = 100000
     chunks = [file[i:i+chunkSize] for i in range(0, len(file), chunkSize)]
     data.filesInDl.remove(paths)
